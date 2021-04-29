@@ -2,9 +2,9 @@
 # PROJET PYTHON
 ## SPEC :
 
-| Header 1      |     2 header    |   header 3 |
-| ------------- |: -------------: | ---------: |
-| 1 Online      |        1        |      value |
-| Line 2        |        2        |      value |
-| 3 Online      |        3        |      value |
+|SEA|SEO|
+|---|---|
+|Pour chaque visite un coût|Une fois le SEO installé plus de coût |
+|Plus sûr d'atteindre les objectifs|Peu fiable en cas de mise a jours google|
+
 
