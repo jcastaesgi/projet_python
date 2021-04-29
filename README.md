@@ -1,2 +1,5 @@
 
 # PROJET PYTHON
+## SPEC :
+
+
