@@ -10,7 +10,6 @@ Pour pouvoir récupérer le projet il faut copier coller cette commande :
 ```
 git clone -b dev https://github.com/jcastaesgi/projet_python.git projet_python
 
-(Instruction git clone env dans le readme)
 ```
 Placez vous dans le dossier projet_python
 ```
