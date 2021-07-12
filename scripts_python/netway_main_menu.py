@@ -2,7 +2,9 @@
 import mariadb, sys
 
 # Import fichiers python
+# from netway_menu import menu_superadmin, menu_admin, menu_user
 from netway_menu import *
+from netway_ftp import *
 
 # Connexion à la BDD
 try:
@@ -30,7 +32,7 @@ def authentification():
     user_role = ""
     is_connected = False
 
-    cur.execute("SELECT count(*) AS nb, role FROM utilisateurs WHERE login=? AND password=?",(login,mdp))
+    cur.execute("SELECT count(*) AS nb, role FROM utilisateurs WHERE login=? AND password=?",("superadmin","ESGI@2021"))
     for(nb,role) in cur:
         user_role = role
         if(nb > 0):
@@ -46,12 +48,13 @@ def authentification():
         authentification()
 
 print("Bienvenue sur notre application, Merci de bien vouloir vous authentifier.")
+
 role = authentification()
-print(role)
 
 if(role == 1 ):
-    menu_superadmin()
-elif(role == 2 ):
-    menu_admin()
-else:
-    menu_user()
+    menu_superadmin(cur,conn)
+
+# elif(role == 2 ):
+    # menu_admin()
+# else:
+    # menu_user()

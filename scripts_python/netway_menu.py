@@ -1,64 +1,144 @@
 # Import des modules
-from consolemenu import *
-from consolemenu.items import *
-import pyfiglet
-import os
-
-# Import de fichiers python
+# from netway_scan_port import check_ports_connus
+from netway_bdd_gestion_users import creation_usr_bdd, checkLogin, modif_usr_bdd, suppr_usr_bdd, getListUser
 from netway_scan_port import *
+from netway_ftp import *
 
-def menu_superadmin():
-    # CREATION DU MENU PRINCIPAL
-    menu = ConsoleMenu("Menu principal", "Bienvenue dans le programme SuperAdmin de Team_Netway :")
+## MENU GESTION BDD ##
+def menu_gestion_users_bdd(cur,conn):
+    print("\n################################")
+    print("# [1] Créer un utilisateur     #")
+    print("# [2] Modifier un utilisateur  #")
+    print("# [3] Supprimer un utilisateur #")
+    print("# [4] Liste des utilisateurs   #")
+    print("# [0] Retour au menu principal #")
+    print("################################\n")
 
-    # CREATION DU SOUS-MENU GESTION USERS BDD
-    gestion_users = SelectionMenu(["Création d'utilisateurs", "Modification d'utilisateurs", "Suppression d'utilisateurs"])
+    # menu_gestion_users_bdd()
+    option = int(input("Choisissez une option : "))
+
+    if option == 1:
+        creation_usr_bdd(cur, conn)
+    elif option == 2:
+        checklogin = checkLogin(cur, conn) #checklogin contient une valeur booléenne et l'id de l'utilisateur 
+        if checklogin[0] == True:
+            modif_usr_bdd(cur, conn, checklogin[1]) 
+        else:
+            print("Aucun utilisateur trouvé avec ce login, veuillez saisir un login connu.")
+            menu_gestion_users_bdd(cur,conn)
+    elif option == 3:
+        checklogin = checkLogin(cur, conn) #checklogin contient une valeur booléenne et l'id de l'utilisateur 
+        if checklogin[0] == True:
+            suppr_usr_bdd(cur, conn, checklogin[1])
+        else:
+            print("Aucun utilisateur trouvé avec ce login, veuillez saisir un login connu.")
+            menu_gestion_users_bdd(cur,conn)
+    elif option == 4:
+        getListUser(cur, conn)
+    elif option == 0:
+        menu_superadmin(cur, conn)
+    else:
+        print(f"Choix incorrect, merci de sélectionner une option.")
+        menu_gestion_users_bdd(cur, conn)
+
+    menu_gestion_users_bdd(cur, conn)
+
+## MENU SECURITE RESEAU ##
+def menu_secu_reseau(cur, conn):
+    print("\n######################################")
+    print("# [1] Tester les ports connus        #")
+    print("# [2] Choissir une plage de ports    #")
+    print("# [3] Liste des ports ouverts        #")
+    print("# [0] Retour au menu principal       #")
+    print("######################################\n")
+
+    option = int(input("Choisissez une option : "))
+
+    if option == 1:
+        scanports_auto()
+        print(f"Ports auto")
+    elif option == 2:
+        scanports_manuel()
+    elif option == 3:
+        print(f"Liste des ports ouverts")
+    elif option == 0:
+        menu_superadmin(cur, conn)
+    else:
+        print(f"Erreur")
+        menu_secu_reseau(cur,conn)
+
+    option = int(input("Choisissez une option : "))
+
+## MENU BOITE A OUTILS ##
+def menu_tools(cur, conn):
+    print("\n######################################")
+    print("# [1] Sécurité des ports             #")
+    print("# [2] Brute Force                    #")
+    print("# [3] Liste des ports ouverts        #")
+    print("# [0] Retour au menu principal       #")
+    print("######################################\n")
+
+    option = int(input("Choisissez une option : "))
+
+    if option == 1:
+        menu_secu_reseau(cur, conn)
+    elif option == 2:
+        print(f"Choisir plage de ports")
+    elif option == 3:
+        print(f"Liste des ports ouvers")
+    elif option == 0:
+        menu_superadmin(cur, conn)
+    else:
+        print(f"Erreur")
+        menu_tools(cur, conn)
+
+    option = int(input("Choisissez une option : "))
+
+## MENU FTP ##
+def menu_ftp():
+    print("\n######################################")
+    print("# [1] Afficher le répertoire courant #")
+    print("# [2] Choix 2                        #")
+    print("# [3] Choix 3                        #")
+    print("# [0] Retour au menu principal       #")
+    print("######################################\n")
+
+    option = int(input("Choisissez une option : "))
+
+    if option == 1:
+        ftp_conf()
+        menu_ftp()
+    elif option == 2:
+        print(f"Choix 2")
+    elif option == 3:
+        print(f"Choix 3")
+    elif option == 0:
+        menu_superadmin()
+    else:
+        print(f"Erreur", menu_ftp())
+
+    option = int(input("Choisissez une option : "))
     
-    # CREATION DU MENU CONTENANT LE SOUS MENU GESTION_USERS
-    submenu_item_gestion_user = SubmenuItem("Gestion des utilisateurs", gestion_users, menu)
-    function_item = FunctionItem("Sécurité des serveurs -PORTS-",input)
+## MENU SUPERADMIN #
+def menu_superadmin(cur,conn):
+    print("\n######################################")
+    print("# [1] Gestion des utilisateurs en BDD #")
+    print("# [2] Boite à outils                  #")
+    print("# [3] Service FTP                     #")
+    print("# [0] Quitter le programme.           #")
+    print("######################################\n")
 
-    # AFFICHAGE DES MENUS DANS MENU PRINCIPAL
-    menu.append_item(submenu_item_gestion_user)
-    menu.append_item(function_item)
-    
-    # AFFICHER LE MENU INTERACTIF
-    menu.show()
+    option = int(input("Choisissez une option : "))
 
-
-
-def menu_admin():
-    # CREATION DU MENU PRINCIPAL
-    menu = ConsoleMenu("Menu principal", "Bienvenue dans le programme Utilisateur Team_Netway:")
-
-    # CREATION DU SOUS-MENU GESTION USERS BDD
-    gestion_users = SelectionMenu(["Création d'utilisateurs", "Modification d'utilisateurs", "Suppression d'utilisateurs"])
-
-    # CREATION DU MENU CONTENANT LE SOUS MENU GESTION_USERS
-    submenu_item = SubmenuItem("Gestion des utilisateurs", gestion_users, menu)
-
-    # AFFICHAGE DES MENUS DANS MENU PRINCIPAL
-    menu.append_item(submenu_item)
-
-    # AFFICHER LE MENU INTERACTIF
-    menu.show()
-
-
-
-
-
-def menu_user():
-    # CREATION DU MENU PRINCIPAL
-    menu = ConsoleMenu("Menu principal", "Bienvenue dans le programme Utilisateur Team_Netway:")
-
-    # CREATION DU SOUS-MENU GESTION USERS BDD
-    gestion_users = SelectionMenu(["Création d'utilisateurs", "Modification d'utilisateurs", "Suppression d'utilisateurs"])
-
-    # CREATION DU MENU CONTENANT LE SOUS MENU GESTION_USERS
-    submenu_item = SubmenuItem("Gestion des utilisateurs", gestion_users, menu)
-
-    # AFFICHAGE DES MENUS DANS MENU PRINCIPAL
-    menu.append_item(submenu_item)
-
-    # AFFICHER LE MENU INTERACTIF
-    menu.show()
+    if option == 1:
+        menu_gestion_users_bdd(cur, conn)
+        pass
+    elif option == 2:
+        menu_secu_reseau(cur, conn)
+    elif option == 3:
+        menu_ftp()
+    elif option == 0: 
+        print("Merci d'avoir utilisé l'application teamnetway !")
+        exit 
+    else:
+        print("Choix incorrect, merci de sélectionner une option.", menu_superadmin(cur, conn))
