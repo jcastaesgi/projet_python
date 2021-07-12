@@ -20,7 +20,7 @@ from netway_menu import *
 
 
 # Création d'un utilisateur en BDD
-def creation_usr_bdd(cur, conn):
+def creation_usr_bdd(cur, conn, role, site):
     queryOk = False
     # UTILISER LE LOGIN POUR LA SUITE
     checklogin = checkLogin(cur, conn) #checkmail contient une valeur booléenne et l'id de l'utilisateur 
@@ -34,9 +34,11 @@ def creation_usr_bdd(cur, conn):
         user_lastname = input("Nom de famille de l'utilisateur : ").lower()
         user_email = checklogin[2] + "@teamnetway.com"
         user_role = input("Type d'utilisateur (2- admin, 3- Utilisateur) : ")
+        if(role == 1):
+            site = input("Site de l'utilisateur (paris, rennes, strasbourg, grenoble) : ")
         # user_pwd = pwd
         mdprandom = "mdprandom"
-        query = f"INSERT INTO utilisateurs (prenom,nom,email,role,login,password) VALUES ('{user_name}', '{user_lastname}', '{user_email}', '{user_role}', '{checklogin[2]}', '{mdprandom}')"
+        query = f"INSERT INTO utilisateurs (prenom,nom,email,role,login,password, site) VALUES ('{user_name}', '{user_lastname}', '{user_email}', '{user_role}', '{checklogin[2]}', '{mdprandom}', '{site}')"
         
         try: 
             cur.execute(query)      # Préparation de la requête SQL
@@ -53,7 +55,7 @@ def creation_usr_bdd(cur, conn):
             print("Erreur lors de la création de l'utilisateur, veuillez contacter votre administrateur réseau.")
 
 # Modification d'un utilisateur en BDD
-def modif_usr_bdd(cur, conn, id):
+def modif_usr_bdd(cur, conn, role, site, id):
     # Définition des variables
     queryOk = False
     user_name = input("Prénom d'utilisateur : ").lower()
@@ -62,8 +64,10 @@ def modif_usr_bdd(cur, conn, id):
     # user_email = login + "@teamnetway.com"
     # user_pwd = pwd
     user_role = input("Type d'utilisateur (2- admin, 3- Utilisateur) : ")
+    if(role == 1):
+            site = input("Site de l'utilisateur (paris, rennes, strasbourg, grenoble) : ")
     mdprandom = "mdprandom"
-    query = f"UPDATE utilisateurs SET prenom='{user_name}', nom='{user_lastname}', password='{mdprandom}', role='{user_role}' WHERE id={id}"
+    query = f"UPDATE utilisateurs SET prenom='{user_name}', nom='{user_lastname}', password='{mdprandom}', role='{user_role}', site='{site}' WHERE id={id}"
     
     try: 
         cur.execute(query)      # Préparation de la requête SQL
@@ -95,9 +99,11 @@ def suppr_usr_bdd(cur, conn, id):
         print("Erreur lors de la modification de l'utilisateur, veuillez contacter votre administrateur réseau.")
 
 # Vérification de l'existance de l'email en bdd
-def checkLogin(cur, conn):
+def checkLogin(cur, role, site):
     login = input("Veuillez saisir le login : ").lower()
-    query = f"SELECT id, count(*) AS nb FROM utilisateurs WHERE login='{login}';"
+    query = f"SELECT id, count(*) AS nb FROM utilisateurs WHERE login='{login}' "
+    if(role != 1):
+        query = query + f"AND site='{site}'"
     cur.execute(query)
     for(id, nb) in cur: 
         if(nb > 0):
@@ -105,14 +111,18 @@ def checkLogin(cur, conn):
         else:
             return (False, id, login)
             
-def getListUser(cur, conn):
+def getListUser(cur, conn, role, site):
 
-    query = f"SELECT login, prenom, nom, email, role from utilisateurs WHERE 1 ORDER BY role ASC"
+    query = f"SELECT login, prenom, nom, email, role, site from utilisateurs "
+    if(role != 1):
+        query = query + f"WHERE site='{site}' "
+    query = query + "ORDER BY role ASC"
+    print(query)
     cur.execute(query)
-    print(" ___________________________________________________________________________________________________________________________________________ ")
-    print(f"|   {'login':20}   |   {'prenom':20}   |   {'nom':20}   |   {'email':40}   |   {'role':5}   |")
-    print("|-------------------------------------------------------------------------------------------------------------------------------------------|")
-    for(login, prenom, nom, email, role) in cur:
-        print(f"|   {login:20}   |   {prenom:20}   |   {nom:20}   |   {email:40}   |   {role:5}   |")
-    print("|___________________________________________________________________________________________________________________________________________|")
+    print(" ____________________________________________________________________________________________________________________________________________________________ ")
+    print(f"|   {'login':20}   |   {'prenom':20}   |   {'nom':20}   |   {'email':40}   |   {'role':5}   |   {'site':10}   |")
+    print("|------------------------------------------------------------------------------------------------------------------------------------------------------------|")
+    for(login, prenom, nom, email, role, site) in cur:
+        print(f"|   {login:20}   |   {prenom:20}   |   {nom:20}   |   {email:40}   |   {role:5}   |   {site:10}   |")
+    print("|____________________________________________________________________________________________________________________________________________________________|")
     
