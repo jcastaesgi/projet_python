@@ -23,11 +23,11 @@ from netway_menu import *
 def creation_usr_bdd(cur, conn, role, site):
     queryOk = False
     # UTILISER LE LOGIN POUR LA SUITE
-    checklogin = checkLogin(cur, conn) #checkmail contient une valeur booléenne et l'id de l'utilisateur 
+    checklogin = checkLogin(cur, role, site) #checkmail contient une valeur booléenne et l'id de l'utilisateur 
 
     if checklogin[0] == True:
         print("Un utilisateur possède déjà ce login, veuillez saisir un login différent.")
-        creation_usr_bdd(cur,conn) # Rappel de la fonction en cours en cas de login déjà présent en bdd
+        creation_usr_bdd(cur,conn, role, site) # Rappel de la fonction en cours en cas de login déjà présent en bdd
     else:
         # Définition des variables
         user_name = input("Prénom d'utilisateur : ").lower()

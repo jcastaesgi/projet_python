@@ -1,7 +1,7 @@
 # Import des modules
 # from netway_scan_port import check_ports_connus
 from netway_bdd_gestion_users import creation_usr_bdd, checkLogin, modif_usr_bdd, suppr_usr_bdd, getListUser
-from netway_scan_port import scanports_auto, scanports_manuel
+# from netway_scan_port import scanports_auto, scanports_manuel
 # from netway_ftp import *
 
 ## MENU GESTION BDD ##
