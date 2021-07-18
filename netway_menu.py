@@ -1,7 +1,7 @@
 # Import des modules
 # from netway_scan_port import check_ports_connus
 from netway_bdd_gestion_users import creation_usr_bdd, checkLogin, modif_usr_bdd, suppr_usr_bdd, getListUser
-# from netway_scan_port import scanports_auto, scanports_manuel
+from netway_scan_port import scanPortAuto, scanports
 # from netway_ftp import *
 
 ## MENU GESTION BDD ##
@@ -44,7 +44,7 @@ def menu_gestion_users_bdd(cur,conn,role, site):
     menu_gestion_users_bdd(cur, conn, role, site)
 
 ## MENU SECURITE RESEAU ##
-def menu_secu_reseau(cur, conn):
+def menu_secu_reseau(cur, conn, role, site):
     print("\n######################################")
     print("# [1] Tester les ports connus        #")
     print("# [2] Choissir une plage de ports    #")
@@ -55,21 +55,21 @@ def menu_secu_reseau(cur, conn):
     option = int(input("Choisissez une option : "))
 
     if option == 1:
-        scanports_auto()
+        scanPortAuto()
     elif option == 2:
-        scanports_manuel()
+        scanports()
     elif option == 3:
         print(f"Liste des ports ouverts")
     elif option == 0:
-        menu(cur, conn)
+        menu(cur, conn, role, site)
     else:
         print(f"Erreur")
-        menu_secu_reseau(cur,conn)
+        menu_secu_reseau(cur,conn, role, site)
 
     option = int(input("Choisissez une option : "))
 
 ## MENU BOITE A OUTILS ##
-def menu_tools(cur, conn):
+def menu_tools(cur, conn, role, site):
     print("\n######################################")
     print("# [1] Sécurité des ports             #")
     print("# [2] Brute Force                    #")
@@ -80,16 +80,16 @@ def menu_tools(cur, conn):
     option = int(input("Choisissez une option : "))
 
     if option == 1:
-        menu_secu_reseau(cur, conn)
+        menu_secu_reseau(cur, conn, role, site)
     elif option == 2:
         print(f"Choisir plage de ports")
     elif option == 3:
         print(f"Liste des ports ouvers")
     elif option == 0:
-        menu(cur, conn)
+        menu(cur, conn, role, site)
     else:
         print(f"Erreur")
-        menu_tools(cur, conn)
+        menu_tools(cur, conn, role, site)
 
     option = int(input("Choisissez une option : "))
 
