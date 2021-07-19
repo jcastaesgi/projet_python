@@ -4,9 +4,10 @@ from ftplib import FTP
 import ftplib
 from os import chdir, getcwd
 import sys, socket, glob
+from netway_menu import *
 
 ## Fonction connection au serveur avec socket
-def login():
+def login_ftp():
     try:
         "Se connecter au serveur FTP"
         ftp_host = input("Entrer l'adresse IP du serveur : ")
@@ -17,10 +18,13 @@ def login():
         ftp = FTP(ftp_host, ftp_login, ftp_password)
         print("Connection OK")
         print(ftp.getwelcome())
+        status_ftp = True
     except:
         print("Connection échoué")
-    return ftp
-    return MonSocket
+        status_ftp = False
+        login_ftp()
+    # return ftp
+    # return MonSocket
 
 ## Fonction pour afficher le répertoire
 def ContenuRep_FTP():
@@ -33,6 +37,7 @@ def ContenuRep_FTP():
         print("Contenu du répertoire courant :", dir)
     except:
         print("Répertoire inexistant")
+    
 
 ## Fonction pour envoyer un fichier au serveur FTP
 def Upload_FTP():
@@ -65,9 +70,11 @@ def Download():
         print("Une erreur est survenu")
 
 
-ftp = login()
-Upload_FTP()
-Download()
+
+
+#ftp = login()
+#Upload_FTP()
+#Download()
 
 ## Je dois savoir ou est-ce je dois placer la fermeture du socket, ici il ne reconnait pas la varibale "MonSocket" (ce qui est normal)
 

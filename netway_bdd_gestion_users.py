@@ -79,7 +79,7 @@ def modif_usr_bdd(cur, conn, role, site, id):
     if(queryOk):
         print(f"L'utilisateur {user_name} {user_lastname} a bien été modifié !")
     else : 
-        print("Erreur lors de la modification de l'utilisateur, veuillez contacter votre administrateur réseau.")
+        print("Erreur lors de la modification de l'utilisateur, veuillez contacter votre administrateur système.")
 
 # Suppression d'un utilisateur en BDD
 def suppr_usr_bdd(cur, conn, id):
@@ -96,9 +96,9 @@ def suppr_usr_bdd(cur, conn, id):
     if(queryOk):
         print(f"L'utilisateur a bien été supprimé !")
     else : 
-        print("Erreur lors de la modification de l'utilisateur, veuillez contacter votre administrateur réseau.")
+        print("Erreur lors de la modification de l'utilisateur, veuillez contacter votre administrateur système.")
 
-# Vérification de l'existance de l'email en bdd
+# Vérification de l'existance du login en bdd
 def checkLogin(cur, role, site):
     login = input("Veuillez saisir le login : ").lower()
     query = f"SELECT id, count(*) AS nb FROM utilisateurs WHERE login='{login}' "

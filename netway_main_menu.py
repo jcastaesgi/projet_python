@@ -1,10 +1,7 @@
 # Importation des modules
 import mariadb, sys
-
-# Import fichiers python
-# from netway_menu import menu, menu_admin, menu_user
 from netway_menu import *
-# from netway_ftp import *
+
 
 # Connexion à la BDD
 try:
@@ -27,7 +24,7 @@ cur = conn.cursor()
 
 def authentification():
     # DEFINITION DES VARIABLES
-    login = input("Nom d'utilisateur : ") #Stokage dans une variable le login
+    login = input("Login : ") #Stokage dans une variable le login
     mdp = input("Mot de passe : ") #Stokage dans une variable le password
     user_role = ""
     is_connected = False
